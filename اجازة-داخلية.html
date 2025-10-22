@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إجازة داخلية</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/28B0910P/snapedit-1754626983902.png">
+<style>
+  body {
+    background-color: #0b132b;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0%;
+    left: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/MTrPcVG2/image.gif') no-repeat;
+    background-size: 50%;
+    background-position: left top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/qMmRN7ss/final-3.gif') no-repeat;
+    background-size: 50%;
+    background-position: right top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  .container {
+    background: #1c2541;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    color: #5bc0be;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  input, select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: #3a506b;
+    color: white;
+    font-family: "Cairo", sans-serif;
+    text-align: center;
+    transition: 0.3s ease;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #5bc0be;
+    box-shadow: 0 0 10px #5bc0be80;
+  }
+
+  button {
+    width: 100%;
+    background: #5bc0be;
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-top: 15px;
+  }
+
+  button:hover {
+    background: #a1dfd5;
+    transform: scale(1.03);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1c2541;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #5bc0be;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1dfd5;
+  }
+
+  @media (max-width: 768px) {
+    body::before, body::after { display: none; }
+    .container {
+      width: 90%;
+      padding: 25px;
+    }
+    ::-webkit-scrollbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>نموذج إجازة داخلية</h2>
+  
+  <label>رقم الصادر:</label>
+  <input type="text" id="issueNumber" placeholder="أدخل رقم الصادر">
+  
+  <label>ايدي العسكري:</label>
+  <input type="text" id="soldierId" placeholder="مثال : 1110595924767555654">
+  
+  <label>المدة (بالساعات):</label>
+  <input type="text" id="duration" placeholder="اكتب عدد الساعات">
+
+  <label>القطاع التابع له:</label>
+  <select id="sector" onchange="updateLeaveNumbers()">
+    <option value="ضابط أمن عام">ضابط أمن عام</option>
+    <option value="فرد أمن عام">فرد أمن عام</option>
+    <option value="ضابط أمن طرق">ضابط أمن طرق</option>
+    <option value="فرد أمن طرق">فرد أمن طرق</option>
+  </select>
+
+  <label>رقم الإجازة:</label>
+  <select id="leaveNumber"></select>
+
+  <button onclick="generateMessage()">نسخ البرقية</button>
+  <button onclick="generateRoomModel()">نسخ نموذج روم الإجازات</button>
+</div>
+
+<script>
+function getSaudiDate() {
+  const now = new Date();
+  const saTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
+  return saTime;
+}
+
+function roundToNext5(date) {
+  let minutes = date.getMinutes();
+  let rounded = Math.ceil(minutes / 5) * 5;
+  if (rounded === 60) {
+    date.setHours(date.getHours() + 1);
+    date.setMinutes(0);
+  } else {
+    date.setMinutes(rounded);
+  }
+  return date;
+}
+
+function formatTime(date) {
+  let hours = date.getHours();
+  let minutes = date.getMinutes().toString().padStart(2, "0");
+  let period = hours >= 12 ? "مساءا" : "صباحا";
+  hours = hours % 12 || 12;
+  return `${hours.toString().padStart(2, "0")}:${minutes} ${period}`;
+}
+
+function formatDate(date) {
+  let y = date.getFullYear();
+  let m = (date.getMonth() + 1).toString().padStart(2, "0");
+  let d = date.getDate().toString().padStart(2, "0");
+  return `${y}/${m}/${d}`;
+}
+
+function pluralizeHours(h) {
+  if (h === 1) return "ساعة واحدة";
+  if (h === 2) return "ساعتين";
+  if (h >= 3 && h <= 10) return `${h} ساعات`;
+  return `${h} ساعة`;
+}
+
+function updateLeaveNumbers() {
+  const sector = document.getElementById("sector").value;
+  const select = document.getElementById("leaveNumber");
+  select.innerHTML = "";
+
+  const isOfficer = sector.includes("ضابط");
+  const max = isOfficer ? 4 : 5;
+
+  for (let i = 1; i <= max; i++) {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = i;
+    select.appendChild(opt);
+  }
+}
+updateLeaveNumbers();
+
+function generateMessage() {
+  const issue = document.getElementById("issueNumber").value || "0000";
+  const id = document.getElementById("soldierId").value || "xxxxxx";
+  const duration = parseInt(document.getElementById("duration").value) || 0;
+
+  let now = getSaudiDate();
+  now = roundToNext5(now);
+  let end = new Date(now.getTime() + duration * 60 * 60 * 1000);
+  end = roundToNext5(end);
+
+  let msg = `**﷽**
+
+**قـرار صـادر من مـكتب الشـؤون الإداريـة رقـم ( ${issue} ) :**
+
+**ينـص علـى قبول إجازة العسكري المحتـرم :**
+
+<@${id}>
+
+\`\`\`إجازة داخلية
+
+المــدة  : ${pluralizeHours(duration)} 
+
+تبدأ من تاريخ: ${formatDate(now)}
+
+الساعة: ${formatTime(now)} بتوقيت مكة المكرمة
+
+تاريخ العودة: ${formatDate(end)}
+
+الساعة: ${formatTime(end)} بتوقيت مكة المكرمة
+
+———————————————————————————————————————
+\`\`\`
+
+**ترسل نسخة للـ **<@&1071933319362654329> 
+ 
+**توقيع :**
+
+<@&1071933294473662505> 
+ 
+**مـــديــر مـكـتـب **<@&1071933319362654329> 
+
+<@697432773639536661>
+
+<@&1080964059974881451>
+ 
+**نــائـب مـديـر مـكـتـب **<@&1071933319362654329> 
+
+<@801559249805115413> 
+
+**إعـتـماد ✍🏻 :**
+
+<@&1071933293865480192> 
+
+<@1098355352514330765> 
+
+<@&1071933294473662505>
+ 
+<@697432773639536661>`;
+  
+  navigator.clipboard.writeText(msg);
+  alert("✅ تم نسخ البرقية بنجاح");
+}
+
+function generateRoomModel() {
+  const id = document.getElementById("soldierId").value || "xxxxxx";
+  const duration = parseInt(document.getElementById("duration").value) || 0;
+  const sector = document.getElementById("sector").value;
+  const leaveNum = document.getElementById("leaveNumber").value;
+
+  let now = getSaudiDate();
+  now = roundToNext5(now);
+  let end = new Date(now.getTime() + duration * 60 * 60 * 1000);
+  end = roundToNext5(end);
+
+  let msg = `**${sector.includes("ضابط") ? "ضابط" : "فرد"} ${leaveNum} - ${sector.includes("طرق") ? "أمن طرق" : "أمن عام"}  |   <@${id}> **
+     
+**المدة : ${pluralizeHours(duration)} **
+
+**يتم الرجوع : ${formatDate(end)}**
+
+** ${formatTime(end)} **
+
+||<@&1071933319362654329> ||`;
+
+  navigator.clipboard.writeText(msg);
+  alert("📋 تم نسخ نموذج روم الإجازات بنجاح");
+}
+</script>
+
+</body>
+</html>

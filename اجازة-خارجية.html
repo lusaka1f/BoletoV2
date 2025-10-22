@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إجازة خارجية</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/28B0910P/snapedit-1754626983902.png">
+<style>
+  body {
+    background-color: #0b132b;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0%;
+    left: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/MTrPcVG2/image.gif') no-repeat;
+    background-size: 50%;
+    background-position: left top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/qMmRN7ss/final-3.gif') no-repeat;
+    background-size: 50%;
+    background-position: right top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  .container {
+    background: #1c2541;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    color: #5bc0be;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: #3a506b;
+    color: white;
+    text-align: center;
+    transition: 0.3s ease;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #5bc0be;
+    box-shadow: 0 0 10px #5bc0be80;
+  }
+
+  button {
+    width: 100%;
+    background: #5bc0be;
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-top: 15px;
+  }
+
+  button:hover {
+    background: #a1dfd5;
+    transform: scale(1.03);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1c2541;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #5bc0be;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1dfd5;
+  }
+
+  @media (max-width: 768px) {
+    body::before, body::after { display: none; }
+    .container {
+      width: 90%;
+      padding: 25px;
+    }
+    ::-webkit-scrollbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>نموذج إجازة خارجية</h2>
+  
+  <label>رقم الصادر:</label>
+  <input type="text" id="issueNumber" placeholder="أدخل رقم الصادر">
+  
+  <label>ايدي العسكري:</label>
+  <input type="text" id="soldierId" placeholder="مثال : 1110595924767555654">
+  
+  <label>المدة (بالأيام):</label>
+  <input type="text" id="duration" placeholder="اكتب عدد الأيام">
+
+  <button onclick="generateMessage()">نسخ البرقية</button>
+  <button onclick="generateRoleModel()">نسخ نموذج إعطاء الرول</button>
+</div>
+
+<script>
+function getSaudiTime() {
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  return new Date(utc + (3 * 60 * 60 * 1000)); 
+}
+
+function formatDate(date) {
+  let y = date.getFullYear();
+  let m = (date.getMonth() + 1).toString().padStart(2, "0");
+  let d = date.getDate().toString().padStart(2, "0");
+  return `${y}/${m}/${d}`;
+}
+
+function pluralizeDays(d) {
+  if (d === 1) return "يوم واحد";
+  if (d === 2) return "يومين";
+  if (d >= 3 && d <= 10) return `${d} أيام`;
+  return `${d} يوم`;
+}
+
+function generateMessage() {
+  const issue = document.getElementById("issueNumber").value || "0000";
+  const id = document.getElementById("soldierId").value || "xxxxxx";
+  const duration = parseInt(document.getElementById("duration").value) || 1;
+
+  let now = getSaudiTime();
+  let end = new Date(now.getTime() + duration * 24 * 60 * 60 * 1000);
+
+  let msg = `**﷽**
+
+**قـرار صـادر من مـكتب الشـؤون الإداريـة رقـم ( ${issue} ) :**
+
+**ينـص علـى قبول إجازة العسـكري المحتـرم**:
+
+<@${id}> 
+
+\`\`\`إجازه خارجيه
+
+المدة  : ${pluralizeDays(duration)} 
+
+تبدأ من تاريخ  ${formatDate(now)}
+
+تاريــخ  العـــودة  ${formatDate(end)}
+
+———————————————————————————————————————
+\`\`\`
+
+ترسل نسخة للـ <@&1071933319362654329> 
+ 
+**توقيع**:
+
+<@&1071933294473662505>  
+
+مـــديــر مـكـتـب <@&1071933319362654329>  
+
+<@697432773639536661>
+
+<@&1080964059974881451>  
+
+نــائـب مـديـر مـكـتـب <@&1071933319362654329>  
+
+<@801559249805115413>
+
+**إعـتـماد** ✍🏻 :  
+
+<@&1071933293865480192>  
+
+<@1098355352514330765>  
+
+<@&1071933294473662505>  
+
+<@697432773639536661>`;
+
+  navigator.clipboard.writeText(msg);
+  alert("✅ تم نسخ برقية الإجازة الخارجية بنجاح!");
+}
+
+function generateRoleModel() {
+  const id = document.getElementById("soldierId").value || "xxxxxx";
+
+  let msg = `**الموضوع : إعطاء رول**
+
+**الاسم منشن :** <@${id}>  
+
+**الرول :** <@&1079860325056270427> 
+
+||<@&1071933319362654329>||`;
+
+  navigator.clipboard.writeText(msg);
+  alert("📋 تم نسخ نموذج إعطاء الرول بنجاح!");
+}
+</script>
+
+</body>
+</html>

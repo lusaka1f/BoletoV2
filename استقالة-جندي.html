@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إستقالة (جندي - جندي أول)</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/28B0910P/snapedit-1754626983902.png">
+<style>
+  body {
+    background-color: #0b132b;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0%;
+    left: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/MTrPcVG2/image.gif') no-repeat;
+    background-size: 50%;
+    background-position: left top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/qMmRN7ss/final-3.gif') no-repeat;
+    background-size: 50%;
+    background-position: right top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  .container {
+    background: #1c2541;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    color: #5bc0be;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  input, select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: #3a506b;
+    color: white;
+    font-family: "Cairo", sans-serif;
+    text-align: center;
+    transition: 0.3s ease;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #5bc0be;
+    box-shadow: 0 0 10px #5bc0be80;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 25px;
+  }
+
+  button {
+    width: 100%;
+    background: #5bc0be;
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  button:hover {
+    background: #a1dfd5;
+    transform: scale(1.03);
+  }
+
+  textarea {
+    display: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1c2541;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #5bc0be;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1dfd5;
+  }
+
+  @media (max-width: 768px) {
+    body::before, body::after { display: none; }
+    .container {
+      width: 90%;
+      padding: 25px;
+    }
+    ::-webkit-scrollbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>إستقالة (جندي - جندي أول)</h2>
+
+  <label>الرتبة:</label>
+  <select id="rank">
+    <option value="جندي">جندي</option>
+    <option value="جندي أول">جندي أول</option>
+  </select>
+
+  <label>ايدي العسكري:</label>
+  <input type="text" id="soldierId" placeholder="مثال : 1381169759210700820">
+
+  <label>اسم العسكري:</label>
+  <input type="text" id="soldierName" placeholder="مثال : محمد بدوي">
+
+  <label>كود العسكري:</label>
+  <input type="text" id="soldierCode" placeholder="مثال : 840">
+
+  <label>سبب الاستقالة:</label>
+  <input type="text" id="reason" placeholder="مثال : خاص">
+
+  <div class="buttons">
+    <button onclick="generateCommonModel()">📋 نسخ نموذج روم المشترك</button>
+    <button onclick="generateAdminModel()">🗂️ نسخ نموذج روم مواضيع الشؤون</button>
+  </div>
+
+  <textarea id="output" readonly></textarea>
+</div>
+
+<script>
+function getRankMention(rank) {
+  const ranks = {
+    "جندي": "<@&1071933309707370536>",
+    "جندي أول": "<@&1071933309157920768>"
+  };
+  return ranks[rank] || "";
+}
+
+function formatDate(date) {
+  let y = date.getFullYear();
+  let m = (date.getMonth() + 1).toString().padStart(2, "0");
+  let d = date.getDate().toString().padStart(2, "0");
+  return `${y}/${m}/${d}`;
+}
+
+function generateAdminModel() {
+  const id = document.getElementById("soldierId").value || "xxxxxx";
+  const name = document.getElementById("soldierName").value || "الاسم غير محدد";
+  const code = document.getElementById("soldierCode").value || "000";
+  const rank = document.getElementById("rank").value;
+  const reason = document.getElementById("reason").value || "غير محدد";
+  const rankMention = getRankMention(rank);
+  const today = formatDate(new Date());
+
+  let msg = `**الموضوع : إستقالة برتبة : ${rankMention}**
+
+**الاسم منشن :** <@${id}>
+
+**الاسم بدون منشن: [P-${code}] ${name}**
+
+**سبب الإستقالة : ${reason}**
+
+**مستحق منع : ✅**
+
+**العهدة : ✅**
+
+**الغرامات : ✅**
+
+**تاريخ الإستقالة : ${today}**
+
+ترسل نسخة لـ : || <@&1071933319362654329> ||`;
+
+  navigator.clipboard.writeText(msg);
+  alert("✅ تم نسخ نموذج روم مواضيع الشؤون بنجاح!");
+}
+  
+function generateCommonModel() {
+  const id = document.getElementById("soldierId").value || "xxxxxx";
+  const name = document.getElementById("soldierName").value || "الاسم غير محدد";
+  const code = document.getElementById("soldierCode").value || "000";
+  const rank = document.getElementById("rank").value;
+  const reason = document.getElementById("reason").value || "غير محدد";
+  const rankMention = getRankMention(rank);
+  const today = formatDate(new Date());
+
+  let msg = `**الموضوع : استقالة برتبة : ${rankMention}**
+
+**الاسم منشن :** <@${id}>
+
+**الاسم بدون منشن: [P-${code}] ${name}**
+
+**سبب الإستقالة : ${reason}**
+
+**مستحق منع : ✅**
+
+**العهدة : ⏳ **
+
+**الغرامات : مليون الفصل⏳ **
+
+**تاريخ الإستقالة : ${today}**
+
+ترسل نسخة لـ : || <@&1071933313259937872> ||`;
+
+  navigator.clipboard.writeText(msg);
+  alert("✅ تم نسخ نموذج روم المشترك بنجاح!");
+}
+</script>
+
+</body>
+</html>

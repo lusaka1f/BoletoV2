@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قسم الشؤون الإدارية</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/28B0910P/snapedit-1754626983902.png">
+
+<style>
+  body {
+    background-color: #0b132b;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh !important;
+    margin: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/MTrPcVG2/image.gif') no-repeat;
+    background-size: 50%;
+    background-position: left top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/qMmRN7ss/final-3.gif') no-repeat;
+    background-size: 50%;
+    background-position: right top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  .container {
+    background: #1c2541;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    color: #5bc0be;
+    margin-bottom: 25px;
+    font-size: 28px;
+  }
+
+  .btn {
+    display: block;
+    background: #5bc0be;
+    color: #000;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 12px;
+    margin: 10px 0;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+
+  .btn:hover {
+    background: #a1dfd5;
+    transform: scale(1.05);
+  }
+
+  footer {
+    margin-top: 25px;
+    font-size: 13px;
+    opacity: 0.8;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1c2541;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #5bc0be;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1dfd5;
+  }
+
+  @media (max-width: 768px) {
+    body::before, body::after {
+      display: none;
+    }
+
+    .container {
+      width: 90%;
+      padding: 25px;
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>قسم الشؤون الإدارية</h1>
+
+  <a href="استقالة.html" class="btn">📄 نموذج إستقالة</a>
+  <a href="استقالة-جندي.html" class="btn">📄 نموذج إستقالة (جندي - جندي أول)</a>
+  <a href="اجازة-خارجية.html" class="btn">✈️ نموذج إجازة خارجية</a>
+  <a href="اجازة-داخلية.html" class="btn">🏠 نموذج إجازة داخلية</a>
+  <a href="انتداب.html" class="btn">🗂️ نموذج إنتداب</a>
+  <a href="ابتعاث.html" class="btn">💼 نموذج إبتعاث</a>
+  <a href="كسر-اجازات.html" class="btn">🔄 نموذج كسر الإجازات والإنتدابات</a>
+
+  <footer>الشؤون الإدارية التابعة لقطاع الأمن العام بمقاطعة بوليتو © 2025</footer>
+</div>
+
+</body>
+</html>

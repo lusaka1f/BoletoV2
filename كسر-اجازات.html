@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نموذج كسر الإجازات والإنتدابات</title>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/28B0910P/snapedit-1754626983902.png">
+<style>
+  body {
+    background-color: #0b132b;
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0%;
+    left: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/MTrPcVG2/image.gif') no-repeat;
+    background-size: 50%;
+    background-position: left top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: -4%;
+    width: 100%;
+    height: 100%;
+    background: url('https://i.postimg.cc/qMmRN7ss/final-3.gif') no-repeat;
+    background-size: 50%;
+    background-position: right top;
+    opacity: 0.08;
+    z-index: 0;
+  }
+
+  .container {
+    background: #1c2541;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    width: 380px;
+    position: relative;
+    z-index: 1;
+    max-height: 90vh;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    color: #5bc0be;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: right;
+  }
+
+  input, select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: #3a506b;
+    color: white;
+    font-family: "Cairo", sans-serif;
+    text-align: center;
+    transition: 0.3s ease;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #5bc0be;
+    box-shadow: 0 0 10px #5bc0be80;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 25px;
+  }
+
+  button {
+    width: 100%;
+    background: #5bc0be;
+    color: #000;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+
+  button:hover {
+    background: #a1dfd5;
+    transform: scale(1.03);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1c2541;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #5bc0be;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a1dfd5;
+  }
+
+  @media (max-width: 768px) {
+    body::before, body::after { display: none; }
+    .container {
+      width: 90%;
+      padding: 25px;
+    }
+    ::-webkit-scrollbar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>نموذج كسر الإجازات والإنتدابات</h2>
+
+  <label>ايدي العسكري:</label>
+  <input type="text" id="soldierId" placeholder="مثال : 760697571365617714">
+
+  <label>ايدي مصدر القرار:</label>
+  <input type="text" id="sourceId" placeholder="مثال : 806514221281706003">
+
+  <label>الموضوع:</label>
+  <select id="subject">
+    <option value="كسر إجازة خارجية">كسر إجازة خارجية</option>
+    <option value="كسر إجازة داخلية">كسر إجازة داخلية</option>
+    <option value="كسر إبتعاث">كسر إبتعاث</option>
+    <option value="كسر إنتداب">كسر إنتداب</option>
+  </select>
+
+  <label>رابط القرار:</label>
+  <input type="text" id="link" placeholder="أدخل رابط القرار">
+
+  <div class="buttons">
+    <button onclick="generateMessage()">📋 نسخ نموذج الكسر</button>
+  </div>
+</div>
+
+<script>
+function formatDateSaudi() {
+  // نحسب الوقت حسب توقيت السعودية UTC+3
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const saTime = new Date(utc + (3 * 60 * 60 * 1000));
+  let y = saTime.getFullYear();
+  let m = (saTime.getMonth() + 1).toString().padStart(2, "0");
+  let d = saTime.getDate().toString().padStart(2, "0");
+  return `${y}/${m}/${d}`;
+}
+
+function generateMessage() {
+  const soldierId = document.getElementById("soldierId").value || "xxxxxx";
+  const sourceId = document.getElementById("sourceId").value || "xxxxxx";
+  const subject = document.getElementById("subject").value || "غير محدد";
+  const link = document.getElementById("link").value || "لا يوجد رابط";
+  const today = formatDateSaudi();
+
+  let typeWord = "";
+  if (subject.includes("إجازة")) typeWord = "الإجازة";
+  else if (subject.includes("إنتداب")) typeWord = "الإنتداب";
+  else if (subject.includes("إبتعاث")) typeWord = "الإبتعاث";
+  else typeWord = "القرار";
+
+  let msg = `**الاســم مــنــشــن : <@${soldierId}>**  
+
+**مــصــدر الــقــرار مــنــشــن : <@${sourceId}>**  
+
+**الــمــوضــوع : ${subject}**  
+
+**قــرار ${typeWord} : ${link}**  
+
+**تــاريــخ كــســر ${typeWord} : ${today}**  
+
+|| <@&1071933319362654329> ||`;
+
+  navigator.clipboard.writeText(msg);
+  alert("✅ تم نسخ نموذج روم كسر الإجازات والإنتدابات بنجاح!");
+}
+</script>
+
+</body>
+</html>
