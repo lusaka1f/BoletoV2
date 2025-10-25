@@ -134,6 +134,55 @@
     background: #a1dfd5;
   }
 
+  .warning-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(11,19,43,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    animation: fadeInBox 0.5s ease forwards;
+  }
+
+  @keyframes fadeInBox {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .warning-content {
+    position: relative;
+    background: #1c2541;
+    border-radius: 15px;
+    padding: 30px;
+    width: 340px;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    animation: appear 0.5s ease forwards;
+  }
+
+  @keyframes appear {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .close-btn:hover {
+    transform: scale(1.2);
+  }
+
   @media (max-width: 768px) {
     body::before, body::after { display: none; }
     .container {
@@ -145,6 +194,14 @@
 </style>
 </head>
 <body>
+
+<div id="warning" class="warning-box" style="display:none;">
+  <div class="warning-content">
+    <span class="close-btn" onclick="closeWarning()">❌</span>
+    <h2>⚠️ غير مسموح بالإجازات الآن</h2>
+    <p>الإجازات الداخلية ممنوعة يوم <b>الجمعة</b> و <b>الثلاثاء</b>،<br>وأيضًا من الساعة <b>6:00 صباحًا</b> حتى <b>2:00 مساءً </b>باقي ايام الاسبوع.</p>
+  </div>
+</div>
 
 <div class="container">
   <h2>نموذج إجازة داخلية</h2>
@@ -176,8 +233,26 @@
 <script>
 function getSaudiDate() {
   const now = new Date();
-  const saTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
-  return saTime;
+  return new Date(now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
+}
+
+function checkLeaveAllowed() {
+  const now = getSaudiDate();
+  const day = now.getDay(); // 0 الأحد ... 6 السبت
+  const hour = now.getHours();
+
+  const isForbiddenDay = (day === 2 || day === 5); // الثلاثاء و الجمعة
+  const isForbiddenTime = (hour >= 6 && hour < 14);
+
+  if (isForbiddenDay || isForbiddenTime) {
+    document.getElementById("warning").style.display = "flex";
+    document.querySelector(".container").style.pointerEvents = "none";
+  }
+}
+
+function closeWarning() {
+  document.getElementById("warning").style.display = "none";
+  document.querySelector(".container").style.pointerEvents = "auto";
 }
 
 function roundToNext5(date) {
@@ -257,7 +332,6 @@ function generateMessage() {
 
 الساعة: ${formatTime(now)} بتوقيت مكة المكرمة
 
-
 تاريخ العودة: ${formatDate(end)}
 
 الساعة: ${formatTime(end)} بتوقيت مكة المكرمة
@@ -266,17 +340,17 @@ function generateMessage() {
 \`\`\`
 
 **ترسل نسخة للـ **<@&1071933319362654329> 
- 
+
 **توقيع :**
 
 <@&1071933294473662505> 
- 
+
 **مـــديــر مـكـتـب **<@&1071933319362654329> 
 
 <@697432773639536661>
 
 <@&1080964059974881451>
- 
+
 **نــائـب مـديـر مـكـتـب **<@&1071933319362654329> 
 
 <@801559249805115413> 
@@ -288,9 +362,9 @@ function generateMessage() {
 <@1098355352514330765> 
 
 <@&1071933294473662505>
- 
+
 <@697432773639536661>`;
-  
+
   navigator.clipboard.writeText(msg);
   alert("✅ تم نسخ البرقية بنجاح");
 }
@@ -307,7 +381,7 @@ function generateRoomModel() {
   end = roundToNext5(end);
 
   let msg = `**${sector.includes("ضابط") ? "ضابط" : "فرد"} ${leaveNum} - ${sector.includes("طرق") ? "أمن طرق" : "أمن عام"}  |   <@${id}> **
-     
+
 **المدة : ${pluralizeHours(duration)} **
 
 **يتم الرجوع : ${formatDate(end)}**
@@ -319,9 +393,9 @@ function generateRoomModel() {
   navigator.clipboard.writeText(msg);
   alert("📋 تم نسخ نموذج روم الإجازات بنجاح");
 }
+
+window.onload = checkLeaveAllowed;
 </script>
 
 </body>
 </html>
-
-
