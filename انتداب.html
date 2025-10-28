@@ -188,6 +188,7 @@
   </select>
 
   <div class="buttons">
+    <button onclick="copyBanner()">📑 نسخ البانر</button>
     <button onclick="generateMessage()">📜 نسخ البرقية</button>
     <button onclick="generateRoomModel()">🗂️ نسخ نموذج روم الإنتدابات</button>
   </div>
@@ -196,6 +197,12 @@
 </div>
 
 <script>
+function copyBanner() {
+  const banner = "https://i.postimg.cc/8cPKBLvz/entdab.gif";
+  navigator.clipboard.writeText(banner);
+  alert("✅ تم نسخ رابط البانر بنجاح!");
+}
+
 function roundToNext5(date) {
   let minutes = date.getMinutes();
   let rounded = Math.ceil(minutes / 5) * 5;
@@ -348,4 +355,3 @@ function generateRoomModel() {
 
 </body>
 </html>
-
