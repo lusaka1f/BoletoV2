@@ -169,11 +169,20 @@
   <label>رقم الإجازة:</label>
   <select id="leaveNumber"></select>
 
+  <!-- 🔹 زر نسخ رابط البانر -->
+  <button onclick="copyBanner()">📑 نسخ رابط البانر</button>
+
   <button onclick="generateMessage()">📜 نسخ البرقية</button>
   <button onclick="generateRoomModel()">🗂️ نسخ نموذج روم الإجازات</button>
 </div>
 
 <script>
+function copyBanner() {
+  const bannerLink = "https://i.postimg.cc/SNx3WbLV/da5lya.gif";
+  navigator.clipboard.writeText(bannerLink);
+  alert("✅ تم نسخ رابط البانر بنجاح");
+}
+
 function getSaudiDate() {
   const now = new Date();
   const saTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Riyadh" }));
@@ -322,4 +331,3 @@ function generateRoomModel() {
 
 </body>
 </html>
-
