@@ -163,9 +163,9 @@
   <input type="text" id="sourceId" placeholder="مثال : 806514221281706003">
 
   <label>الموضوع:</label>
-  <select id="subject">
+  <select id="subject" onchange="toggleRemoveButton()">
     <option value="كسر إجازة خارجية">كسر إجازة خارجية</option>
-    <option value="كسر إجازة داخلية">كسر إجازة داخلية</option>
+    <option value="كسر إجازة داخلية" selected>كسر إجازة داخلية</option>
     <option value="كسر إبتعاث">كسر إبتعاث</option>
     <option value="كسر إنتداب">كسر إنتداب</option>
   </select>
@@ -175,12 +175,12 @@
 
   <div class="buttons">
     <button onclick="generateMessage()">📋 نسخ نموذج الكسر</button>
+    <button id="removeRoleBtn" style="display:none;" onclick="copyRemoveRole()">📋 نسخ نموذج إزالة الرول</button>
   </div>
 </div>
 
 <script>
 function formatDateSaudi() {
-  // نحسب الوقت حسب توقيت السعودية UTC+3
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000;
   const saTime = new Date(utc + (3 * 60 * 60 * 1000));
@@ -217,6 +217,26 @@ function generateMessage() {
 
   navigator.clipboard.writeText(msg);
   alert("✅ تم نسخ نموذج روم كسر الإجازات والإنتدابات بنجاح!");
+}
+
+function copyRemoveRole() {
+  const soldierId = document.getElementById("soldierId").value || "xxxxxx";
+  const msg = `**الموضوع : إزالة رول**  
+
+**الاســم مــنــشــن :** <@${soldierId}>  
+
+**الــرول :** <@&1079860325056270427>  
+
+||<@&1071933319362654329>||`;
+  
+  navigator.clipboard.writeText(msg);
+  alert("✅ تم نسخ نموذج إزالة الرول بنجاح!");
+}
+
+function toggleRemoveButton() {
+  const subject = document.getElementById("subject").value;
+  const btn = document.getElementById("removeRoleBtn");
+  btn.style.display = (subject === "كسر إجازة خارجية") ? "block" : "none";
 }
 </script>
 
