@@ -157,6 +157,7 @@
   <label>المدة (بالأيام):</label>
   <input type="text" id="duration" placeholder="اكتب عدد الأيام">
 
+  <button onclick="copyBanner()">📑 نسخ البانر</button>
   <button onclick="generateMessage()">📜 نسخ البرقية</button>
   <button onclick="generateRoleModel()">🗂️ نسخ نموذج إعطاء الرول</button>
 </div>
@@ -180,6 +181,12 @@ function pluralizeDays(d) {
   if (d === 2) return "يومين";
   if (d >= 3 && d <= 10) return `${d} أيام`;
   return `${d} يوم`;
+}
+
+function copyBanner() {
+  const link = "https://i.postimg.cc/bN6XMwNh/5argya.gif";
+  navigator.clipboard.writeText(link);
+  alert("✅ تم نسخ رابط البانر بنجاح!");
 }
 
 function generateMessage() {
@@ -257,5 +264,3 @@ function generateRoleModel() {
 
 </body>
 </html>
-
-
