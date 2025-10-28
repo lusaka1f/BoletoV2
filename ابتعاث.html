@@ -181,12 +181,19 @@
   </select>
 
   <div class="buttons">
+    <button onclick="copyBanner()">📑 نسخ البانر</button>
     <button onclick="generateMessage()">📜 نسخ برقية الإبتعاث</button>
     <button onclick="generateRoomModel()">🗂️ نسخ نموذج روم الإبتعاثات</button>
   </div>
 </div>
 
 <script>
+function copyBanner() {
+  const bannerUrl = "https://i.postimg.cc/8cPKBLvz/entdab.gif";
+  navigator.clipboard.writeText(bannerUrl);
+  alert("✅ تم نسخ رابط البانر بنجاح!");
+}
+
 function getSaudiTime() {
   let now = new Date();
   let utc = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -333,6 +340,3 @@ function generateRoomModel() {
 
 </body>
 </html>
-
-
-
