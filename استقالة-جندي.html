@@ -178,6 +178,15 @@
   <label>سبب الاستقالة:</label>
   <input type="text" id="reason" placeholder="مثال : خاص">
 
+  <label>سبب الفصل:</label>
+  <input type="text" id="resign" placeholder="ضع رابط قرار روم المجلس العسكري">
+
+  <label>رابط تسليم العهدة:</label>
+  <input type="text" id="guns" placeholder="ضع رابط تسليم العهدة من روم المشترك">
+
+  <label>رابط تسديد الغرامات:</label>
+  <input type="text" id="taxes" placeholder="ضع رابط تسديد الغرامات من ثريد سداد حكم عسكري">
+
   <div class="buttons">
     <button onclick="generateCommonModel()">📋 نسخ نموذج روم المشترك</button>
     <button onclick="generateAdminModel()">🗂️ نسخ نموذج روم مواضيع الشؤون</button>
@@ -208,24 +217,27 @@ function generateAdminModel() {
   const code = document.getElementById("soldierCode").value || "000";
   const rank = document.getElementById("rank").value;
   const reason = document.getElementById("reason").value || "غير محدد";
+  const resign = document.getElementById("resign").value ||"غير محدد";
+  const guns = document.getElementById("guns").value ||"غير محدد";
+  const taxes = document.getElementById("taxes").value ||"غير محدد";
   const rankMention = getRankMention(rank);
   const today = formatDate(new Date());
 
-  let msg = `**الموضوع : إستقالة برتبة : ${rankMention}**
+  let msg = `**الموضوع : فصل برتبة : ${rankMention}**
 
 **الاسم منشن :** <@${id}>
 
 **الاسم بدون منشن: [P-${code}] ${name}**
 
-**سبب الإستقالة : ${reason}**
+**سبب الفصل : [المجلس العسكري](${resign})**
 
 **مستحق منع : ✅**
 
-**العهدة : ✅**
+**العهدة : [روم المشترك](${guns})**
 
-**الغرامات : ✅**
+**الغرامات : [سداد حكم عسكري](${taxes})**
 
-**تاريخ الإستقالة : ${today}**
+**تاريخ الفصل : ${today}**
 
 ترسل نسخة لـ : || <@&1071933319362654329> ||`;
 
@@ -265,4 +277,5 @@ function generateCommonModel() {
 
 </body>
 </html>
+
 
